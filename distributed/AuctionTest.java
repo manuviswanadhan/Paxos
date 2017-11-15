@@ -39,7 +39,7 @@ public class AuctionTest {
 
 	}
 
-	private void init(int nPersons, int nItems, double eps, double[][] weight) {
+	private void init(int nPersons, int nItems, double eps, double[][] weight, double[] price) {
 		String host = "127.0.0.1";
 		String[] personPeers = new String[nPersons];
 		int[] personPorts = new int[nPersons];
@@ -57,11 +57,11 @@ public class AuctionTest {
 			itemPeers[i] = host;
 		}
 		for (int i = 0; i < nPersons; i++) {
-			persons[i] = new Person(i, itemPeers, itemPorts, nItems, eps, weight[i]);
+			persons[i] = new Person(i, itemPeers, itemPorts, personPeers, personPorts, nItems, eps, weight[i], price);
 		}
 		
 		for (int i = 0; i < nItems; i++) {
-			items[i] = new Item(i, nPersons, personPeers, personPorts);
+			items[i] = new Item(i, nPersons, itemPeers, itemPorts, personPeers, personPorts);
 		}
 		
 	}
@@ -105,18 +105,17 @@ public class AuctionTest {
 		int n_set = N1;
 		int[] l_set = new int[N1];
 		double[][] weight = {
-				{1, 1, 1, 1, 1},
-				{1, 1, 1, 1, 1},
-				{1, 1, 1, 1, 1},
-				{1, 1, 1, 1, 1},
-				{1, 1, 1, 1, 1}
+				{5, 1, 1, 1, 1},
+				{1, 5, 1, 1, 1},
+				{1, 1, 5, 1, 1},
+				{1, 1, 1, 5, 1},
+				{1, 1, 1, 1, 5}
 		};
-//		for (int i = 0; i < N1; i++) {
-//			for (int j = 0; j < N2; j++) {
-//				weight[i][j] = rand.nextDouble() * 5.0;
-//			}
-//		}
-		init(N1, N2, eps, weight);
+		for (int i = 0; i < N1; i++) {
+			for (int j = 0; j < N2; j++) {
+				weight[i][j] = rand.nextDouble() * 5.0;
+			}
+		}
 		double[] price = new double[N2];
 		int[] parent = new int[N2];
 
@@ -124,8 +123,25 @@ public class AuctionTest {
 			price[i] = 0.0;
 			parent[i] = -1;
 		}
+		init(N1, N2, eps, weight, price);
+
 		for (int i = 0; i < N1; i++) {
 			l_set[i] = i;
+		}
+		
+		for(int i = 0; i < N2; i++) {
+			items[i].Start();
+		}
+		for(int i = 0; i < N1; i++) {
+			persons[i].Start();
+		}
+		while(true) {
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 //
 //		while (n_set > 0) {
@@ -149,10 +165,10 @@ public class AuctionTest {
 //				price[ret.objectIdx] = ret.price;
 //			}
 //		}
-		for(int i = 0; i < N2; i++) {
-			System.out.println(i + ": " + parent[i]);
-			System.out.println(i + ": " + price[i]);
-		}
+//		for(int i = 0; i < N2; i++) {
+//			System.out.println(i + ": " + parent[i]);
+//			System.out.println(i + ": " + price[i]);
+//		}
 
 	}
 

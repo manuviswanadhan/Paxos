@@ -9,18 +9,13 @@ import java.io.Serializable;
  */
 public class Request implements Serializable {
     static final long serialVersionUID=1L;
-    // Your data here
-    public int seq;
-    public int propNum;
-    public Object val;
-    public int peerIdx;
 
-// Your constructor and methods here
-    public Request(int seq, int propNum, Object val, int peerIdx) {
-    this.seq = seq;
-    this.propNum = propNum;
-    this.val = val;
-    this.peerIdx = peerIdx;
-    }
+    public double price;
 
+	public int id;
+	public Request(int id, double price) {
+		super();
+		this.id = id;
+		this.price = price;
+	}
 }

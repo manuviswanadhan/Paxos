@@ -9,7 +9,6 @@ import java.rmi.RemoteException;
  * Decide is the RMI that proposer broadcasts decision once consensus reaches.
  * Please don't change the interface.
  */
-public interface AuctionRMI extends Remote{
+public interface ItemRMI extends Remote{
     Response Bid(Request req) throws RemoteException;
-    Response Response(Request req) throws RemoteException;
 }
