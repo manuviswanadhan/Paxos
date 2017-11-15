@@ -9,7 +9,7 @@ import paxos.Person.retStatus;
 /**
  * This is a subset of entire test cases For your reference only.
  */
-public class PaxosTest {
+public class AuctionTest {
 
 	private retStatus isDecided(Person[] pxa, int personIndex) {
 		return pxa[personIndex].Status();
@@ -36,17 +36,17 @@ public class PaxosTest {
 
 	}
 
-	private Person[] initPaxos(int npaxos, double eps, double[][] weight) {
+	private Person[] initPerson(int nperson, double eps, double[][] weight) {
 		String host = "127.0.0.1";
-		String[] peers = new String[npaxos];
-		int[] ports = new int[npaxos];
-		Person[] pxa = new Person[npaxos];
-		for (int i = 0; i < npaxos; i++) {
+		String[] peers = new String[nperson];
+		int[] ports = new int[nperson];
+		Person[] pxa = new Person[nperson];
+		for (int i = 0; i < nperson; i++) {
 			ports[i] = 1100 + i;
 			peers[i] = host;
 		}
-		for (int i = 0; i < npaxos; i++) {
-			pxa[i] = new Person(i, peers, ports, npaxos, eps, weight[i]);
+		for (int i = 0; i < nperson; i++) {
+			pxa[i] = new Person(i, peers, ports, nperson, eps, weight[i]);
 		}
 		return pxa;
 	}
@@ -72,7 +72,7 @@ public class PaxosTest {
 //				weight[i][j] = rand.nextDouble() * 5.0;
 //			}
 //		}
-		Person[] ps = initPaxos(N1, eps, weight);
+		Person[] ps = initPerson(N1, eps, weight);
 		double[] price = new double[N2];
 		int[] parent = new int[N2];
 

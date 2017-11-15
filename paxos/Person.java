@@ -59,10 +59,10 @@ public class Person implements Runnable{
     public Response Call(String rmi, Request req, int id){
         Response callReply = null;
 
-        PaxosRMI stub;
+        AuctionRMI stub;
         try{
             Registry registry=LocateRegistry.getRegistry(this.ports[id]);
-            stub=(PaxosRMI) registry.lookup("Paxos");
+            stub=(AuctionRMI) registry.lookup("Paxos");
             if(rmi.equals("Prepare"))
                 callReply = stub.Prepare(req);
             else if(rmi.equals("Accept"))
