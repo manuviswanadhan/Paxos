@@ -1,4 +1,4 @@
-package paxos;
+package distributed;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -10,7 +10,6 @@ import java.rmi.RemoteException;
  * Please don't change the interface.
  */
 public interface AuctionRMI extends Remote{
-    Response Prepare(Request req) throws RemoteException;
-    Response Accept(Request req) throws RemoteException;
-    Response Decide(Request req) throws RemoteException;
+    Response Bid(Request req) throws RemoteException;
+    Response Response(Request req) throws RemoteException;
 }

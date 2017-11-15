@@ -1,4 +1,4 @@
-package paxos;
+package distributed;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -63,12 +63,10 @@ public class Person implements Runnable{
         try{
             Registry registry=LocateRegistry.getRegistry(this.ports[id]);
             stub=(AuctionRMI) registry.lookup("Paxos");
-            if(rmi.equals("Prepare"))
-                callReply = stub.Prepare(req);
-            else if(rmi.equals("Accept"))
-                callReply = stub.Accept(req);
-            else if(rmi.equals("Decide"))
-                callReply = stub.Decide(req);
+            if(rmi.equals("Bid"))
+                callReply = stub.Bid(req);
+            else if(rmi.equals("Response"))
+                callReply = stub.Response(req);
             else
                 System.out.println("Wrong parameters!");
         } catch(Exception e){

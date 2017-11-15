@@ -1,10 +1,10 @@
-package paxos;
+package centralized;
 
 import java.util.Random;
 
 import org.junit.Test;
 
-import paxos.Person.retStatus;
+import centralized.Person.retStatus;
 
 /**
  * This is a subset of entire test cases For your reference only.

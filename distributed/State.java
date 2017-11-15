@@ -1,4 +1,4 @@
-package paxos;
+package distributed;
 
 public enum State {
     Decided,
