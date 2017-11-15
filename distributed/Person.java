@@ -10,8 +10,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Person implements Runnable{
 
     ReentrantLock mutex;
-    String[] peers; // hostname
-    int[] ports; // host port
+    String[] itemPeers; // hostname
+    int[] itemPorts; // host port
     int me; // index into peers[]
 
     Registry registry;
@@ -29,14 +29,14 @@ public class Person implements Runnable{
      * Call the constructor to create a Paxos peer.
      * The hostnames of all the Paxos peers (including this one)
      * are in peers[]. The ports are in ports[].
+     * @param eps 
      */
     public Person(int me, String[] peers, int[] ports, int N2, double eps, double[] weight){
 
         this.me = me;
-        this.peers = peers;
-        this.ports = ports;
+        this.itemPeers = peers;
+        this.itemPorts = ports;
         this.mutex = new ReentrantLock();
-        
         this.N2 = N2;
         this.weight = weight;
         this.eps = eps;
@@ -61,7 +61,7 @@ public class Person implements Runnable{
 
         AuctionRMI stub;
         try{
-            Registry registry=LocateRegistry.getRegistry(this.ports[id]);
+            Registry registry=LocateRegistry.getRegistry(this.itemPorts[id]);
             stub=(AuctionRMI) registry.lookup("Paxos");
             if(rmi.equals("Bid"))
                 callReply = stub.Bid(req);
@@ -124,9 +124,10 @@ public class Person implements Runnable{
         			max2 = weight[i] - prices[i];
         		}
         	}
-    		ret.price = prices[maxIndex] + max - max2 + eps;
-    		ret.objectIdx = maxIndex;
-    		ret.state = State.Decided;
+    		
+//    		ret.price = prices[maxIndex] + max - max2 + eps;
+//    		ret.objectIdx = maxIndex;
+//    		ret.state = State.Decided;
     	}
     }
 

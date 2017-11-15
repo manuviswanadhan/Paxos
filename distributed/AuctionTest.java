@@ -11,6 +11,9 @@ import distributed.Person.retStatus;
  */
 public class AuctionTest {
 
+	
+	private Person[] persons;
+	private Item[] items;
 	private retStatus isDecided(Person[] pxa, int personIndex) {
 		return pxa[personIndex].Status();
 	}
@@ -36,20 +39,61 @@ public class AuctionTest {
 
 	}
 
-	private Person[] initPerson(int nperson, double eps, double[][] weight) {
+	private void init(int nPersons, int nItems, double eps, double[][] weight) {
 		String host = "127.0.0.1";
-		String[] peers = new String[nperson];
-		int[] ports = new int[nperson];
-		Person[] pxa = new Person[nperson];
-		for (int i = 0; i < nperson; i++) {
-			ports[i] = 1100 + i;
-			peers[i] = host;
+		String[] personPeers = new String[nPersons];
+		int[] personPorts = new int[nPersons];
+		persons = new Person[nPersons];
+		for (int i = 0; i < nPersons; i++) {
+			personPorts[i] = 1100 + i;
+			personPeers[i] = host;
 		}
-		for (int i = 0; i < nperson; i++) {
-			pxa[i] = new Person(i, peers, ports, nperson, eps, weight[i]);
+		
+		String[] itemPeers = new String[nItems];
+		int[] itemPorts = new int[nItems]; 
+		items = new Item[nItems];
+		for (int i = 0; i < nItems; i++) {
+			itemPorts[i] = 1200 + i;
+			itemPeers[i] = host;
 		}
-		return pxa;
+		for (int i = 0; i < nPersons; i++) {
+			persons[i] = new Person(i, itemPeers, itemPorts, nItems, eps, weight[i]);
+		}
+		
+		for (int i = 0; i < nItems; i++) {
+			items[i] = new Item(i, nPersons, personPeers, personPorts);
+		}
+		
 	}
+//	private Person[] initPerson(int nperson, double eps, double[][] weight) {
+//		String host = "127.0.0.1";
+//		String[] peers = new String[nperson];
+//		int[] ports = new int[nperson];
+//		Person[] pxa = new Person[nperson];
+//		for (int i = 0; i < nperson; i++) {
+//			ports[i] = 1100 + i;
+//			peers[i] = host;
+//		}
+//		for (int i = 0; i < nperson; i++) {
+//			pxa[i] = new Person(i, peers, ports, nperson, eps, weight[i]);
+//		}
+//		return pxa;
+//	}
+//	
+//	private Item[] initItem(int nItems) {
+//		String host = "127.0.0.1";
+//		String[] peers = new String[nItems];
+//		int[] ports = new int[nItems];
+//		Item[] pxa = new Item[nItems];
+//		for (int i = 0; i < nItems; i++) {
+//			ports[i] = 1200 + i;
+//			peers[i] = host;
+//		}
+//		for (int i = 0; i < nItems; i++) {
+//			pxa[i] = new Item(i, peers, ports);
+//		}
+//		return pxa;
+//	}
 
 	@Test
 	public void TestBasic() {
@@ -72,7 +116,7 @@ public class AuctionTest {
 //				weight[i][j] = rand.nextDouble() * 5.0;
 //			}
 //		}
-		Person[] ps = initPerson(N1, eps, weight);
+		init(N1, N2, eps, weight);
 		double[] price = new double[N2];
 		int[] parent = new int[N2];
 
@@ -83,28 +127,28 @@ public class AuctionTest {
 		for (int i = 0; i < N1; i++) {
 			l_set[i] = i;
 		}
-
-		while (n_set > 0) {
-			int currPerson = l_set[n_set - 1];
-			ps[currPerson].Start(price);
-			retStatus ret = null;
-			try {
-				ret = waitForDecide(ps, currPerson);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			if(ret.state == State.Terminated) {
-				n_set--;
-			} else {
-				if(parent[ret.objectIdx] == -1) {
-					n_set--;
-				} else {
-					l_set[n_set - 1] = parent[ret.objectIdx];
-				}
-				parent[ret.objectIdx] = currPerson;
-				price[ret.objectIdx] = ret.price;
-			}
-		}
+//
+//		while (n_set > 0) {
+//			int currPerson = l_set[n_set - 1];
+//			ps[currPerson].Start(price);
+//			retStatus ret = null;
+//			try {
+//				ret = waitForDecide(ps, currPerson);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//			if(ret.state == State.Terminated) {
+//				n_set--;
+//			} else {
+//				if(parent[ret.objectIdx] == -1) {
+//					n_set--;
+//				} else {
+//					l_set[n_set - 1] = parent[ret.objectIdx];
+//				}
+//				parent[ret.objectIdx] = currPerson;
+//				price[ret.objectIdx] = ret.price;
+//			}
+//		}
 		for(int i = 0; i < N2; i++) {
 			System.out.println(i + ": " + parent[i]);
 			System.out.println(i + ": " + price[i]);

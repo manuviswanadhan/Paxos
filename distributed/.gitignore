@@ -5,3 +5,5 @@
 /Request.class
 /Response.class
 /State.class
+/Item$retStatus.class
+/Item.class
